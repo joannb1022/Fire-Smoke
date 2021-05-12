@@ -5,8 +5,8 @@ import utils.CellType;
 import java.util.ArrayList;
 
 public class Cell {
-    CellType type;
-    ArrayList<Cell> neighbours;
+    private CellType type;
+    private ArrayList<Cell> neighbours;
 
     public Cell() {
         this.type = CellType.AVAIABLE;
