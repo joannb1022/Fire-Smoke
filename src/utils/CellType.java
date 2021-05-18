@@ -1,7 +1,7 @@
 package utils;
 
 public enum CellType {
-    AVAIABLE,
+    AVAILABLE,
     BURNING,
     BURNED,
     NONFUEL
