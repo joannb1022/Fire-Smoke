@@ -109,13 +109,33 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
             for (y = 0; y < cells[x].length; ++y) {
                 switch(cells[x][y].getFuel()){
                   case TREE:
-                    g.setColor(new Color(0x0c7d18));
+                    g.setColor(new Color(0x00841B));
                     break;
+                  case GRASS:
+                      g.setColor(new Color(0x56CE00));
+                       break;
                   case GROUND:
-                    g.setColor(new Color(0x1c0900));
+                    g.setColor(new Color(0x4B2821));
                     break;
                   case FIRE:
-                    g.setColor(new Color(0xe4b200));
+                      if(cells[x][y].getTemperature() > 0 && cells[x][y].getTemperature() <= 200){
+                          g.setColor(new Color(0xEFCC78));
+                      }
+                      else if(cells[x][y].getTemperature() > 200 && cells[x][y].getTemperature() <= 400){
+                          g.setColor(new Color(0xF8C302));
+                      }
+                      else if(cells[x][y].getTemperature() > 400 && cells[x][y].getTemperature() <= 600){
+                          g.setColor(new Color(0xFFA201));
+                      }
+                      else if(cells[x][y].getTemperature() > 600 && cells[x][y].getTemperature() <= 800){
+                          g.setColor(new Color(0xFF7700));
+                      }
+                      else if(cells[x][y].getTemperature() > 1000 && cells[x][y].getTemperature() <= 1200){
+                          g.setColor(new Color(0xFF692B));
+                      }
+                      else if(cells[x][y].getTemperature() > 1200){
+                          g.setColor(new Color(0xE73700));
+                      }
                     break;
                 }
 

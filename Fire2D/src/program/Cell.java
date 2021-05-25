@@ -4,8 +4,18 @@ import utils.CellFuel;
 import utils.CellType;
 
 import java.util.ArrayList;
+import java.util.Random;
+
+import static java.lang.Math.abs;
 
 public class Cell {
+    private final float MAX_TREE_HEIGHT = 40f; // w metrach
+    private final float MAX_GRASS_HEIGHT = 0.5f; // w metrach
+    private final float MAX_DIAMETER_SIZE = 5f;
+    private final float MAX_TRANSFER_TREE_COEF = 0.5f;
+    private final float MAX_DIAMETER_GRASS_SIZE = 0.1f;
+    private final float MAX_TRANSFER_GRASS_COEF = 0.2f;
+    private static final Random random = new Random();
     private CellType type;
     private CellFuel fuel;
     private double temperature;
@@ -13,6 +23,9 @@ public class Cell {
     private float slope;
     private int burnTemp; //trzeba chyba ustawiac inna dla drzewa i trawy?
     private float[][] windArray;
+    private float height = 1f;
+    private float diameter = 1f;
+    private float heatTransferCoeff = 1f;
 
 
     public Cell(double t) {
@@ -43,10 +56,16 @@ public class Cell {
         }
 
         if (this.fuel == CellFuel.TREE) {
-            this.burnTemp = 150;
+            this.burnTemp = 500;
+            this.diameter = 1 + random.nextFloat() * (MAX_DIAMETER_SIZE - 1);
+            this.height = 1 + random.nextFloat() * (MAX_TREE_HEIGHT - 1);
+            this.heatTransferCoeff = random.nextFloat() * (MAX_TRANSFER_TREE_COEF);
         }
         if (this.fuel == CellFuel.GRASS){
-            this.burnTemp = 100;
+            this.burnTemp = 250;
+            this.height = 1 + random.nextFloat() * (MAX_GRASS_HEIGHT - 1);
+            this.diameter = 1 + random.nextFloat() * (MAX_DIAMETER_GRASS_SIZE - 1);
+            this.heatTransferCoeff = random.nextFloat() * (MAX_TRANSFER_GRASS_COEF);
         }
         if(this.fuel == CellFuel.FIRE){
             type = CellType.BURNING;
@@ -64,9 +83,9 @@ public class Cell {
     }
 
   public void fireSpread(){
-        temperature += 50;
+        temperature += 2*heatTransferCoeff*(diameter*height)*100/height;
       for (Cell c : this.neighbours){
-        c.temperature += 20;
+        c.temperature += c.heatTransferCoeff*(c.diameter*c.height)*abs(temperature-c.temperature)/c.height;
       }
   }
 
