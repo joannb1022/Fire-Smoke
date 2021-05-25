@@ -19,7 +19,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     private Cell[][] cells;
     private final int size = 10;
     public CellFuel editType;
-    private float temperature;
+    private float temperature = 10;
     private Cell[][] burningCells; //nie wiem czy to sie przyda
 
 
@@ -34,16 +34,19 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 
 
     public void iteration() {
-      for (int x = 0; x < cells.length; ++x)
+      for (int x = 0; x < cells.length; ++x) {
           for (int y = 0; y < cells[x].length; ++y)
-              if (cells[x][y].getType() == CellType.BURNING){
-                cells[x][y].fireSpread();
+              if (cells[x][y].getType() == CellType.BURNING) {
+                  System.out.println("Burning");
+                  cells[x][y].fireSpread();
               }
+      }
 
-        for (int x = 0; x < cells.length; ++x)
-            for (int y = 0; y < cells[x].length; ++y)
-                      cells[x][y].checkState();
-
+        for (int x = 0; x < cells.length; ++x) {
+            for (int y = 0; y < cells[x].length; ++y) {
+                cells[x][y].checkState();
+            }
+        }
 
       this.repaint();
     }

@@ -42,27 +42,32 @@ public class Cell {
               this.type = CellType.AVAILABLE;
         }
 
-        if (this.fuel == CellFuel.TREE){
-          this.burnTemp = 150;
+        if (this.fuel == CellFuel.TREE) {
+            this.burnTemp = 150;
+        }
         if (this.fuel == CellFuel.GRASS){
             this.burnTemp = 100;
         }
-    }
+        if(this.fuel == CellFuel.FIRE){
+            type = CellType.BURNING;
+        }
+
   }
 
     public void checkState(){
       if (this.temperature > this.burnTemp && this.type == CellType.AVAILABLE){
         this.type = CellType.BURNING;
+        this.fuel = CellFuel.FIRE;
       }
 
       //i tu warunek wygaszania tez trzeba
     }
 
   public void fireSpread(){
+        temperature += 50;
       for (Cell c : this.neighbours){
-
+        c.temperature += 20;
       }
-
   }
 
   public void setTemperature(double temp){
@@ -70,6 +75,7 @@ public class Cell {
   }
 
   public void setFuel(CellFuel fuel){
+      System.out.println("FUEL: " + fuel);
       this.fuel = fuel;
       this.setParameters();
 
