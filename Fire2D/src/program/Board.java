@@ -1,6 +1,7 @@
 package program;
 import utils.CellFuel;
 import utils.CellType;
+import utils.WindType;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -21,6 +22,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     public CellFuel editType;
     private float temperature = 10;
     private Cell[][] burningCells; //nie wiem czy to sie przyda
+    public WindType windDir;
 
 
     public Board(int length, int height) {
@@ -37,7 +39,6 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
       for (int x = 0; x < cells.length; ++x) {
           for (int y = 0; y < cells[x].length; ++y)
               if (cells[x][y].getType() == CellType.BURNING) {
-                  System.out.println("Burning");
                   cells[x][y].fireSpread();
               }
       }
@@ -75,6 +76,18 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                         cells[x][y].addNeighbour(cells[i][j]);
                 }
               }
+
+        for (int x = 0; x < cells.length; ++x){
+            for (int y = 0; y < cells[x].length; ++y){
+                  Random random = new Random();
+                  float slopeProb = random.nextFloat();
+                  if (slopeProb < 0.3)
+                      cells[x][y].setSlope(slopeProb);
+                      System.out.println(slopeProb);
+
+                  }
+              }
+
     }
 
     protected void paintComponent(Graphics g) {

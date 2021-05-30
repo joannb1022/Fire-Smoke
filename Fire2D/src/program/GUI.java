@@ -2,6 +2,7 @@ package program;
 
 import utils.CellFuel;
 import utils.CellType;
+import utils.WindType;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -25,6 +26,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private JButton clear;
 	private JComboBox<CellFuel> drawType;
 	private JSlider pred;
+	private JComboBox<WindType> wind;
 	private JFrame frame;
 	private int iterNum = 0;
 	private final int maxDelay = 500;
@@ -61,10 +63,17 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		drawType.addActionListener(this);
 		drawType.setActionCommand("drawType");
 
+
+		wind = new JComboBox<WindType>(WindType.values());
+		wind.addActionListener(this);
+		wind.setActionCommand("wind");
+
 		buttonPanel.add(start);
 		buttonPanel.add(clear);
 		buttonPanel.add(pred);
 		buttonPanel.add(drawType);
+		buttonPanel.add(wind);
+
 
 
 		board = new Board(1024, 768 - buttonPanel.getHeight());
@@ -101,6 +110,11 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 				CellFuel newType = (CellFuel)drawType.getSelectedItem();
 				board.editType = newType;
 			}
+			else if (command.equals("wind")){
+				WindType newType = (WindType)drawType.getSelectedItem();
+				board.windDir = newType;
+			}
+
 
 		}
 	}
