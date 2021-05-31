@@ -1,7 +1,8 @@
 package program;
 import utils.CellFuel;
 import utils.CellType;
-import utils.WindType;
+import utils.WindDir;
+import utils.Wind;
 
 import javax.swing.*;
 import javax.swing.event.MouseInputListener;
@@ -22,7 +23,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     public CellFuel editType;
     private float temperature = 10;
     private Cell[][] burningCells; //nie wiem czy to sie przyda
-    public WindType windDir;
+    public WindDir windDir;
 
 
     public Board(int length, int height) {
@@ -38,18 +39,37 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     public void iteration() {
       for (int x = 0; x < cells.length; ++x) {
           for (int y = 0; y < cells[x].length; ++y)
+            if (cells[x][y].getType() == CellType.BURNING)
+                cells[x][y].calculateProbablityMatrix();
+      }
+
+      for (int x = 0; x < cells.length; ++x) {
+          for (int y = 0; y < cells[x].length; ++y)
               if (cells[x][y].getType() == CellType.BURNING) {
                   cells[x][y].fireSpread();
               }
+              // else{
+              //bo to cieplo tez musi jakos miedzy tymi niepalacymi sie
+              //   cells[x][y].tempRise();
+              // }
       }
-
         for (int x = 0; x < cells.length; ++x) {
             for (int y = 0; y < cells[x].length; ++y) {
                 cells[x][y].checkState();
             }
         }
-
       this.repaint();
+    }
+
+    public void firstIteration(){
+      for (int x = 0; x < cells.length; ++x) {
+          for (int y = 0; y < cells[x].length; ++y) {
+              cells[x][y].setWindMatrix(Wind.windMatrix(windDir));
+          }
+      }
+
+      this.iteration();
+
     }
 
     public void clear() {
@@ -60,12 +80,13 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
         this.repaint();
     }
 
+
     private void initialize(int length, int height) {
         cells = new Cell[length][height];
 
         for (int x = 0; x < cells.length; ++x)
             for (int y = 0; y < cells[x].length; ++y)
-                cells[x][y] = new Cell(temperature);
+                cells[x][y] = new Cell(this.temperature, this.windDir, x, y);
 
         for (int x = 0; x < cells.length; ++x)
             for (int y = 0; y < cells[x].length; ++y)
@@ -74,21 +95,11 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
                         if (i == -1 || j == -1 || i == cells.length || j == cells[x].length || (i == x && y == j))
                             continue;
                         cells[x][y].addNeighbour(cells[i][j]);
+
                 }
               }
-
-        for (int x = 0; x < cells.length; ++x){
-            for (int y = 0; y < cells[x].length; ++y){
-                  Random random = new Random();
-                  float slopeProb = random.nextFloat();
-                  if (slopeProb < 0.3)
-                      cells[x][y].setSlope(slopeProb);
-                      System.out.println(slopeProb);
-
-                  }
-              }
-
     }
+
 
     protected void paintComponent(Graphics g) {
         if (isOpaque()) {

@@ -1,6 +1,6 @@
 package utils;
 
-public enum WindType {
+public enum WindDir {
     N,
     E,
     S,

@@ -4,5 +4,6 @@ public enum CellFuel {
     FIRE,
     GRASS,
     TREE,
-    GROUND
+    GROUND,
+    NONFUEL
 }

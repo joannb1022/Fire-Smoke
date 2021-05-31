@@ -2,7 +2,7 @@ package program;
 
 import utils.CellFuel;
 import utils.CellType;
-import utils.WindType;
+import utils.WindDir;
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
@@ -26,7 +26,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private JButton clear;
 	private JComboBox<CellFuel> drawType;
 	private JSlider pred;
-	private JComboBox<WindType> wind;
+	private JComboBox<WindDir> wind;
 	private JFrame frame;
 	private int iterNum = 0;
 	private final int maxDelay = 500;
@@ -64,7 +64,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		drawType.setActionCommand("drawType");
 
 
-		wind = new JComboBox<WindType>(WindType.values());
+		wind = new JComboBox<WindDir>(WindDir.values());
 		wind.addActionListener(this);
 		wind.setActionCommand("wind");
 
@@ -83,9 +83,16 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(timer)) {
+			if (iterNum == 0){
+				board.firstIteration();
+				// System.out.println("hrhrg");
+			}
+			else{
+				board.iteration();
+			}
 			iterNum++;
 			frame.setTitle("Fire spread simulation (" + Integer.toString(iterNum) + " iteration)");
-			board.iteration();
+
 		} else {
 			String command = e.getActionCommand();
 			if (command.equals("Start")) {
@@ -111,8 +118,8 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 				board.editType = newType;
 			}
 			else if (command.equals("wind")){
-				WindType newType = (WindType)drawType.getSelectedItem();
-				board.windDir = newType;
+				WindDir newDir = (WindDir)wind.getSelectedItem();
+				board.windDir = newDir;
 			}
 
 
