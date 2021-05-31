@@ -24,6 +24,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
     private float temperature = 10;
     private Cell[][] burningCells; //nie wiem czy to sie przyda
     public WindDir windDir;
+    public float windSpeed;
 
 
     public Board(int length, int height) {

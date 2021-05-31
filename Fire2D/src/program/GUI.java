@@ -14,6 +14,8 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
+import javax.swing.JSpinner;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
@@ -27,6 +29,7 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 	private JComboBox<CellFuel> drawType;
 	private JSlider pred;
 	private JComboBox<WindDir> wind;
+	private JSpinner windSpeed;
 	private JFrame frame;
 	private int iterNum = 0;
 	private final int maxDelay = 500;
@@ -63,16 +66,20 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		drawType.addActionListener(this);
 		drawType.setActionCommand("drawType");
 
-
 		wind = new JComboBox<WindDir>(WindDir.values());
 		wind.addActionListener(this);
 		wind.setActionCommand("wind");
+
+		// windSpeed = new JSpinner(new SpinnerNumberModel(5, 5, 50, 5));
+		// wind.addActionListener(this);
+		// wind.setActionCommand("windSpeed");
 
 		buttonPanel.add(start);
 		buttonPanel.add(clear);
 		buttonPanel.add(pred);
 		buttonPanel.add(drawType);
 		buttonPanel.add(wind);
+		// buttonPanel.add(windSpeed);
 
 
 
@@ -85,7 +92,6 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 		if (e.getSource().equals(timer)) {
 			if (iterNum == 0){
 				board.firstIteration();
-				// System.out.println("hrhrg");
 			}
 			else{
 				board.iteration();
@@ -121,8 +127,11 @@ public class GUI extends JPanel implements ActionListener, ChangeListener {
 				WindDir newDir = (WindDir)wind.getSelectedItem();
 				board.windDir = newDir;
 			}
-
-
+			// else if (command.equals("windSpeed")){
+			// 	float speed = (Float)windSpeed.getValue();
+			// 	// float speed = temp;
+			// 	board.windSpeed = speed;
+			// }
 		}
 	}
 
