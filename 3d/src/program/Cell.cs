@@ -40,6 +40,10 @@ namespace Cells{
       // float[,] slopeMatrix;
       // float[,] windMatrix;
 
+      float convection;
+      double mass;
+      double heatEnergy;
+
       System.Random random = new System.Random();
 
 
@@ -55,6 +59,7 @@ namespace Cells{
           this.windDir = dir;
           this.neighbours = new ArrayList();
           this.burnTemp = GROUND_BURN_TEMP;
+          setParameters();
       }
 
       public Cell(double t, CellFuel fuel, WindDir dir) {
@@ -65,6 +70,7 @@ namespace Cells{
           this.windDir = dir;
           this.neighbours = new ArrayList();
           this.burnTemp = GROUND_BURN_TEMP;
+          setParameters();
       }
 
       public void addNeighbour(Cell cell) {
@@ -114,6 +120,75 @@ namespace Cells{
           }
 
     }
+
+    //powietrze - powietrze (bierzemy komorke nad nami, Td to my)
+    public void Convection(/*Cell cell*/){
+        this.convection -=0.1f; //trzeba ten zminiejszac
+        // this.convection = this.convection / (this.mass * this.heatEnergy);  //to jest wzor z tej pracy
+
+        foreach (Cell cell in this.neighbours){
+            //jesli jest nad nasza komorka
+            if (cell.getFuel() == CellFuel.AIR){
+                double neighTemp = cell.getTemperature();
+                this.temperature = this.temperature - this.convection*(this.temperature - neighTemp);
+                neighTemp  = neighTemp + this.convection*(this.temperature - neighTemp);
+                cell.setTemperature(neighTemp);
+            }
+        }
+
+    }
+
+    public void checkState(){
+      if (this.temperature > this.burnTemp && this.type == CellType.AVAILABLE){
+        this.type = CellType.BURNING;
+        this.fuel = CellFuel.FIRE;
+      }
+
+      // if(this.burnIterations <= 0 ){
+      //   this.type = CellType.BURNED;
+      //   this.setFuel(CellFuel.NONFUEL);
+      // }
+
+
+      //i tu warunek wygaszania tez trzeba
+    }
+
+
+      public void fireSpread(){
+          //   if (this.fuel == CellFuel.GROUND){
+          //     this.temperature -= MAX_TRANSFER_GROUND_COEF * this.initTemp + this.temperature;
+          //     for (Cell c : this.neighbours){
+          //       if (c.getFuel() == CellFuel.GROUND){
+          //         c.temperature -= c.temperature * this.heatTransferCoeff;
+          //     }
+          //   }
+          // // }
+          // else {
+              // this.temperature += 2*this.heatTransferCoeff*(this.diameter*this.height)*100/this.height;
+              // foreach (Cell c in this.neighbours){
+              //   float prob = probablityMatrix[c.getX() - this.x + 1][c.getY() - this.y + 1];
+              //   if(prob > 1)
+              //     c.temperature += c.heatTransferCoeff*(c.diameter*c.height)*abs(temperature-c.temperature)/c.height;
+              // }
+          }
+
+      public void setTemperature(double temp){
+        this.temperature = temp;
+      }
+      public double getTemperature(){
+        return this.temperature;
+      }
+
+      public CellType getType(){
+        return this.type;
+      }
+
+      public CellFuel getFuel(){
+        return this.fuel;
+      }
+
+
+
 
     }
 
