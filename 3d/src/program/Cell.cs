@@ -31,6 +31,7 @@ namespace Cells{
       Warto rozroznic temperature zaplonu (to jet temperatura, przy ktorej komorka zapala sie, jesli ma palacego sie juz sasiada)
       Temperatura samozaplonu - komorka zapala przy niej jesli nie ma palacych sie sasiadow
       */
+
       float SELF_BURN_TEMP_TREE = 2000f; //wg mnie to za duzo
       float BURN_TEMP_TREE = 250f;
       float SMOKE_EMISSION = 0.3f;
@@ -46,6 +47,7 @@ namespace Cells{
 
       CellFuel fuel;
       CellType type;
+      SmokeE smoke;
       double temperature;
       float mass;   //masa
       float density; //gestosc
@@ -62,6 +64,7 @@ namespace Cells{
       float burnTemp;
       float selfBurnTemp;
       float heatTransferCoeff;
+      double SmokeD;
 
 
       System.Random random = new System.Random();
@@ -138,7 +141,6 @@ namespace Cells{
               this.temperature = this.burnTemp;
           }
           else if (this.fuel == CellFuel.NONFUEL){
-            //NO BO TO TEZ MOZE PRZEWODZIC CIEPLO W SUMIE
           }
           else if (this.fuel == CellFuel.AIR){
             this.type = CellType.NONBURN;
@@ -148,8 +150,7 @@ namespace Cells{
 
     //powietrze - powietrze (bierzemy komorke nad nami)
     public void Convection(){
-        // this.CONVECTION_COEF_AIR -=0.1f;
-        this.CONVECTION_COEF_AIR = this.CONVECTION_COEF_AIR / (this.mass * this.specHeat);  //to jest wzor z tej pracy
+        this.CONVECTION_COEF_AIR = this.CONVECTION_COEF_AIR / (this.mass * this.specHeat);
 
         foreach (Cell cell in this.neighbours){
             if (cell.getFuel() == CellFuel.AIR && this.neighbours.IndexOf(cell) == (int)NeighbourPos.U){
@@ -180,17 +181,18 @@ namespace Cells{
 
 
       public void fireSpread(){
-          if (this.fuel == CellFuel.TREE){
-            this.temperature +=200;
-            foreach (Cell cell in this.neighbours){
-              if (this.temperature > cell.getTemperature()  && cell.getFuel() == CellFuel.TREE){
-                cell.setTemperature(this.temperature);
-                }
-            }
-        }
+        //   if (this.fuel == CellFuel.TREE){
+        //     this.temperature +=(200*this.heatTransferCoeff);
+        //     this.heatTransferCoeff = this.heatTransferCoeff / (this.density * this.specHeat);
+        //     foreach (Cell cell in this.neighbours){
+        //       if (this.temperature > cell.getTemperature()  && cell.getFuel() == CellFuel.TREE){
+        //         cell.setTemperature(this.temperature);
+        //         }
+        //     }
+        // }
+
         if (this.fuel == CellFuel.TREE){
-            // this.heatTransferCoeff = this.heatTransferCoeff / (this.density * this.specHeat);
-            this.heatTransferCoeff -=0.1f;
+            this.heatTransferCoeff = this.heatTransferCoeff / (this.density * this.specHeat);
             foreach (Cell cell in this.neighbours){
               if (this.temperature > cell.getTemperature()  && cell.getFuel() == CellFuel.TREE){
                 double newTemp = this.temperature + (this.heatTransferCoeff *(this.temperature - cell.getTemperature()));
@@ -202,17 +204,38 @@ namespace Cells{
             }
         }
 
-
-
-
+        // if (this.fuel == CellFuel.TREE){
+        //   this.heatTransferCoeff = this.heatTransferCoeff / (this.density * this.specHeat);
+        //   //N 0 S
+        //   Cell neighbourN = this.neighbours[(int)NeighbourPos.N];
+        //   Cell neighbourS = this.neighbours[(int) NeighbourPos.S];
+        //   this.temperature += this.heatTransferCoeff * (this.temperature - neighbourN.getTemperature());
+        //   this.temperature -= this.heatTransferCoeff * (this.temperature - neighbourS.getTemperature());
+        //
+        //
+        //
+        //   //E 0 W
+        //   Cell neighbourE = this.neighbours[(int)NeighbourPos.E];
+        //   Cell neighbourW = this.neighbours[(int) NeighbourPos.W];
+        //   this.temperature += this.heatTransferCoeff * (this.temperature - neighbourE.getTemperature());
+        //   this.temperature -= this.heatTransferCoeff * (this.temperature - neighbourW.getTemperature());
+        //
+        // }
       }
 
 
-      public void smokeSpread(){
+      // public void smokeSpread(){
+      //
+      //   foreach(Cell cell in this.neighbours){
+      //     double dn = SmokeClass.getDn(this.neighbours.IndexOf(cell));
+      //     Dn = cell.getSmoke();
+      //     double D = dn / 100 * Math.Min(1/6 * D0, 1/6 * (100 - Dn));
+      //   }
+      // }
 
-
+      public double getSmoke(){
+        return SmokeD;
       }
-
 
       public void setTemperature(double temp){
         this.temperature = temp;
@@ -232,6 +255,10 @@ namespace Cells{
       public void setFuel(CellFuel fuel){
         this.fuel = fuel;
         setParameters();
+      }
+
+      public SmokeE getSmokeE(){
+        return this.smoke;
       }
 
 

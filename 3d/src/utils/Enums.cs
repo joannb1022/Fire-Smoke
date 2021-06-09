@@ -19,6 +19,11 @@ namespace Enums{
         NONBURN
     }
 
+    public enum SmokeE{
+      SMOKE,
+      NOSMOKE
+    }
+
     public enum WindDir {
         N,
         E,

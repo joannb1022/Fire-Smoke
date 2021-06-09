@@ -74,31 +74,40 @@ namespace Environment{
                 //           }
                 //         }
                 //       }
-            //   for (int x = 0; x < this.width; x++) {
-            //       for (int y = 0; y < this.depth; y++) {
-            //           for (int z = 0; z < this.height; z++) {
-            //             cell[x][y][z].Conduction();
-            //           }
-            //         }
-            //       }
-            // for (int x = 0; x < this.width; x++) {
-            //     for (int y = 0; y < this.depth; y++) {
-            //         for (int z = 0; z < this.height; z++) {
-                          // if (cell[x][y][z].fuel = CellFuel.AIR)
-            //            cell[x][y][z].Convection();
-            //         }
-            //       }
-            //     }
-            //   }
+              for (int x = 0; x < this.width; x++) {
+                  for (int y = 0; y < this.depth; y++) {
+                      for (int z = 0; z < this.height; z++) {
+                        cells[x, y, z].fireSpread();
+                      }
+                    }
+                  }
+            for (int x = 0; x < this.width; x++) {
+                for (int y = 0; y < this.depth; y++) {
+                    for (int z = 0; z < this.height; z++) {
+                          if (cells[x,y,z].getFuel() == CellFuel.AIR)
+                       cells[x,y,z].Convection();
+                    }
+                  }
+                }
 
-        //   for (int x = 0; x < this.width; x++) {
-        //       for (int y = 0; y < this.depth; y++) {
-        //           for (int z = 0; z < this.height; z++) {
 
-        //             cell[x][y][z].checkState();
-        //            }
-        //      }
-        // }
+          //   for (int x = 0; x < this.width; x++) {
+          //       for (int y = 0; y < this.depth; y++) {
+          //           for (int z = 0; z < this.height; z++) {
+          //               if (cells[x, y, z].getSmokeE() == SmokeE.SMOKE)
+          //                 cells[x,y,z].smokeSpread();
+          //            }
+          //      }
+          // }
+
+          for (int x = 0; x < this.width; x++) {
+              for (int y = 0; y < this.depth; y++) {
+                  for (int z = 0; z < this.height; z++) {
+
+                    cells[x,y,z].checkState();
+                   }
+             }
+        }
 
         }
 
