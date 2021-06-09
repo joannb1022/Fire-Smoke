@@ -10,6 +10,9 @@ namespace Cells{
   public class Cell{
 
       int x, y, z; //niekoniecznie potrzebne
+      float height = 1f;
+      float width = 1f;
+      float depth = 1f;
 
       //parametry glownie z pracy od prof Wasa
       // float MAX_GRASS_TEMP = 250f;
@@ -109,8 +112,7 @@ namespace Cells{
               this.specHeat = SPEC_HEAT_TREE;
               this.density = DEN_TREE;
               this.heatTransferCoeff = TRANSFER_COEF_TREE;
-              // this.volume =
-              // this.burnIterations =
+              this.burnIterations = 10; //losowo na razie
 
           }
           // else if (this.fuel == CellFuel.GRASS){
@@ -133,6 +135,7 @@ namespace Cells{
           }
           else if(this.fuel == CellFuel.FIRE){
               type = CellType.BURNING;
+              this.temperature = this.burnTemp;
           }
           else if (this.fuel == CellFuel.NONFUEL){
             //NO BO TO TEZ MOZE PRZEWODZIC CIEPLO W SUMIE
@@ -185,8 +188,21 @@ namespace Cells{
                 }
             }
         }
-          // if (this.fuel = CellFuel.TREE){
-          //
+        if (this.fuel == CellFuel.TREE){
+            // this.heatTransferCoeff = this.heatTransferCoeff / (this.density * this.specHeat);
+            this.heatTransferCoeff -=0.1f;
+            foreach (Cell cell in this.neighbours){
+              if (this.temperature > cell.getTemperature()  && cell.getFuel() == CellFuel.TREE){
+                double newTemp = this.temperature + (this.heatTransferCoeff *(this.temperature - cell.getTemperature()));
+                if (newTemp < maxTemperature){
+                this.temperature = newTemp;
+                cell.setTemperature(newTemp);
+                }
+              }
+            }
+        }
+
+
 
 
       }
