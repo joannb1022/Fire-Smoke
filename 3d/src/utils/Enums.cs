@@ -16,6 +16,7 @@ namespace Enums{
         AVAILABLE,
         BURNING,
         BURNED,
+        NONBURN
     }
 
     public enum WindDir {
@@ -29,13 +30,13 @@ namespace Enums{
         SE
     }
 
-    public enum NeigbourPos{
-      U,   //na gorze
-      N,
-      S,
-      E,
-      W,
-      D  //na dole
+    public enum NeighbourPos{
+      U, //na gorze //0
+      N, //1
+      S, //2
+      E, //3
+      W, //4
+      D  //na dole //5
     }
 
 

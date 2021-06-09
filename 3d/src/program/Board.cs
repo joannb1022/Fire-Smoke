@@ -19,7 +19,6 @@ namespace Environment{
       WindDir windDir;
       float windSPeed;
 
-      
 
       public Board(int w, int h, int d, double t) {
           this.width = w;
@@ -34,7 +33,7 @@ namespace Environment{
               for (int y = 0; y < this.depth; y++) {
                   for (int z = 0; z < this.height; z++) {
                       //cells[x,y,z] = new Cell(this.temperature, editFuel, windDir);
-                      cells[x, y, z] = new cells(this.temperature, editFuel);
+                      cells[x, y, z] = new Cell(this.temperature, editFuel, windDir);
                       cells[x,y,z].setParameters();
                   }
               }
@@ -85,6 +84,7 @@ namespace Environment{
             // for (int x = 0; x < this.width; x++) {
             //     for (int y = 0; y < this.depth; y++) {
             //         for (int z = 0; z < this.height; z++) {
+                          // if (cell[x][y][z].fuel = CellFuel.AIR)
             //            cell[x][y][z].Convection();
             //         }
             //       }
@@ -94,7 +94,8 @@ namespace Environment{
         //   for (int x = 0; x < this.width; x++) {
         //       for (int y = 0; y < this.depth; y++) {
         //           for (int z = 0; z < this.height; z++) {
-        //             cell[x][y][z].updateTemperature();
+
+        //             cell[x][y][z].checkState();
         //            }
         //      }
         // }
@@ -104,38 +105,38 @@ namespace Environment{
 
             private void applyWind(int x, int y, int z)
             {
-                switch (dir){
+                switch (windDir){
                     case WindDir.N:
                         if(z+1 < depth)
-                            cell[x][y][z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x,y,z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.W:
                         if(x-1 > 0)
-                            cell[x-1][y][z].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x-1,y,z].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.E:
                         if(x+1 < width)
-                            cell[x+1][y][z].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x+1,y,z].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.S:
                         if(z-1 > 0)
-                            cell[x][y][z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x,y,z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.NE:
                         if(x+1 < width && z+1 < depth)
-                            cell[x+1][y][z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x+1,y,z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.NW:
                         if(x-1 > 0 && z+1 < depth)
-                            cell[x-1][y][z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x-1,y,z+1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.SW:
                         if(x-1 > 0 && z-1 > 0)
-                            cell[x-1][y + 1][z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x-1,y + 1,z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                     case WindDir.SE:
                         if(x+1 < width && z-1 > 0)
-                            cell[x+1][y][z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
+                            cells[x+1,y,z-1].fireSpread(); // nie wiem jak tutaj indeksujemy!
                         break;
                 }
             }
