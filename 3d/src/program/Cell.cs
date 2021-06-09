@@ -10,18 +10,41 @@ namespace Cells{
   public class Cell{
 
       int x, y, z; //niekoniecznie potrzebne
-      float MAX_GRASS_TEMP = 250f;
-      float GRASS_BURN_TEMP = 200f;
+
+      //parametry glownie z pracy od prof Wasa
+      // float MAX_GRASS_TEMP = 250f;
+      // float GRASS_BURN_TEMP = 200f;
+      // float MAX_GRASS_HEIGHT = 0.5f; // w metrach
+      // float MAX_DIAMETER_GRASS_SIZE = 0.1f;
+      // float MAX_TRANSFER_GRASS_COEF = 0.2f;
+
       float MAX_GROUND_TEMP = 250f;
-      //  float MAX_GROUND_TEMP = 250f;
-      float MAX_GRASS_HEIGHT = 0.5f; // w metrach
-      float MAX_DIAMETER_SIZE = 5f;
       float GROUND_BURN_TEMP  = 250f;
-      float MAX_TREE_HEIGHT = 40f; // w metrach
-      float MAX_TRANSFER_TREE_COEF = 0.5f;
-      float MAX_DIAMETER_GRASS_SIZE = 0.1f;
-      float MAX_TRANSFER_GRASS_COEF = 0.2f;
       float MAX_TRANSFER_GROUND_COEF = 0.8f;
+
+
+      /*
+      Parametry dotyczace drzewa i powietrza pochodza z paracy prof Wasa
+      Warto rozroznic temperature zaplonu (to jet temperatura, przy ktorej komorka zapala sie, jesli ma palacego sie juz sasiada)
+      Temperatura samozaplonu - komorka zapala przy niej jesli nie ma palacych sie sasiadow
+      */
+
+      float MAX_DIAMETER_SIZE = 5f;
+      float MAX_TREE_HEIGHT = 40f; // [m]
+      float MAX_TRANSFER_TREE_COEF = 0.5f;
+      float SELF_BURN_TEMP_TREE = 2000f;
+      float BURN_TEMP_TREE = 250f;
+      float SMOKE_EMISSION = 0.3f;
+      float ENERGY_TREE = 1500f; // [J/s]
+      float DEN_TREE = 400f; // [kg/m^3] gestosc - nie uwzgledniamy zmiany gestosci pod wplywem ciepla
+      float TRANSFER_COEF_TREE = 0.3f; //lambda w pracy, wspolczynnik przeowdzenia
+      float SPEC_HEAT_TREE = 2390f; // [J / (kg * K)] cieplo wlasciwe
+
+      float DEN_AIR = 1.29f; // [kg/m^3] gestosc - nie uwzgledniamy zmiany gestosci pod wplywem ciepla
+      float SPEC_HEAT_AIR = 1005f;   // [J / (kg * K)] cieplo wlasciwe
+      float TRANSFER_COEF_AIR = 0.026f;  //wspolczynnik przeowdzenia
+
+
       CellFuel fuel;
       CellType type;
       double temperature;
@@ -29,20 +52,14 @@ namespace Cells{
       float diameter = 1f;
       float heatTransferCoeff = 1f;
       ArrayList neighbours; //nie okresla sie tutaj typu arraylist chyba
-      float burnTemp; //temperatura zaplonu
+      int burningNeighbours;
       int burnIterations; //liczba iteracji po ktorej przestanie sie palic (albo mozna jakos po temperaturze ale tak chyba latwiej)
       double initTemp; //temperatura powietrza, ta ktora cell ma na poczatku
       double maxTemperature; //np jakies 1000 stopni dla drzewa, zeby nie roslo w nieskonczonosc
       float fireSpeed = 0f; //nie wiem czy firespeed, czy windspeed sie przyda bardziej
       float windSpeed = 10f;
-      WindDir windDir; //kierunek wiatru
-      float[,,] probablityMatrix; //teraz chyba powinna byc 3d (?) nie wiem czy sie przyda
-      // float[,] slopeMatrix;
-      // float[,] windMatrix;
-
-      float convection;
-      double mass;
-      double heatEnergy;
+      // WindDir windDir; //kierunek wiatru
+      // float[,,] probablityMatrix; //teraz chyba powinna byc 3d (?) nie wiem czy sie przyda
 
       System.Random random = new System.Random();
 
@@ -144,13 +161,10 @@ namespace Cells{
         this.fuel = CellFuel.FIRE;
       }
 
-      // if(this.burnIterations <= 0 ){
-      //   this.type = CellType.BURNED;
-      //   this.setFuel(CellFuel.NONFUEL);
-      // }
-
-
-      //i tu warunek wygaszania tez trzeba
+      if(this.burnIterations <= 0 ){
+        this.type = CellType.BURNED;
+        this.setFuel(CellFuel.NONFUEL);
+      }
     }
 
 
@@ -171,6 +185,13 @@ namespace Cells{
               //     c.temperature += c.heatTransferCoeff*(c.diameter*c.height)*abs(temperature-c.temperature)/c.height;
               // }
           }
+
+
+      public void smokeSpread(){
+
+
+      }
+
 
       public void setTemperature(double temp){
         this.temperature = temp;

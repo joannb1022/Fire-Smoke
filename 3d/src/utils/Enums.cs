@@ -29,7 +29,14 @@ namespace Enums{
         SE
     }
 
-
+    public enum NeigbourPos{
+      U,   //na gorze
+      N,
+      S,
+      E,
+      W,
+      D  //na dole
+    }
 
 
 }

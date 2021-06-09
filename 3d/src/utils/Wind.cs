@@ -56,4 +56,20 @@ namespace Wind{
           return windMatrix;
     }
   }
+
+
+  class Smoke{
+
+      //funkcja zwraca wspolczynnik ilosciowy dn (strona 57, rownanie 3.19 i 3.20)
+      public double getDn(NeigbourPos pos){
+          switch(pos){
+            case U:
+                return 100;
+            case N or S or W or E:
+                return 50;
+            case D:
+                return 25;
+          }
+      }
+  }
 }
